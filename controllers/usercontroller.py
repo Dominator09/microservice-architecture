@@ -1,6 +1,12 @@
-from flask_restful import Resource, Api, reqparse, fields, marshal_with
+from flask_restful import Resource, Api, reqparse, fields, marshal_with,marshal
 from handlers import userservice
+import json
 
+output = {
+    'statusCode': fields.Integer(default=200),
+    'message': fields.String(default='Success'),
+    'data':fields.Raw()
+}
 class UserService(Resource):
 
     def get(self):
@@ -8,8 +14,24 @@ class UserService(Resource):
         parser.add_argument('email')
         args = parser.parse_args()
         result = userservice.getUser(args.email)
+        print("############DICT###########",result)
+        response = {}
+        if(result):
+            response = {
+                'statusCode':200,
+                'message':'Success',
+                'data':result
+            }
+        else:
+          response = {
+                'statusCode':400,
+                'message':'Not Found',
+                'data':{},
+            }
+        
         print(result)
-        return result  
+        return json.dumps(marshal(response,output))
+          
  
     def put(self):
         parser = reqparse.RequestParser()
