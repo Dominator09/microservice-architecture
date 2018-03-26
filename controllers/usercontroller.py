@@ -1,5 +1,5 @@
 from flask_restful import Resource, Api, reqparse, fields, marshal_with,marshal
-from handlers import userservice
+from handlers import userservice,loginservice
 import json
 
 output = {
@@ -40,4 +40,39 @@ class UserService(Resource):
         args = parser.parse_args(strict=True)
         print(args)
         result = userservice.putUser(args.email,args.password)
-        return result
+        if(result['data']):
+            response = {
+                'statusCode':200,
+                'message':'Success',
+                'data':{'access_token':result['data']}
+            }
+        else:
+          response = {
+                'statusCode':400,
+                'message':result['error'],
+                'data':{},
+            }
+
+        return json.dumps(marshal(response,output))
+
+class LoginService(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('email')
+        parser.add_argument('password')
+        args = parser.parse_args()
+        data = loginservice.login(args)
+        if 'data' in data and data['data']:
+            response = {
+                'statusCode':200,
+                'message':'Success',
+                'data':{'access_token':data['data']}
+            }
+        else:
+          response = {
+                'statusCode':400,
+                'message':data['error'],
+                'data':{},
+            }
+
+        return json.dumps(marshal(response,output))

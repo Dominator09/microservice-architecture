@@ -27,7 +27,7 @@ def putUser(email,password):
         result = cursor.fetchone()
         print("#########################",cursor.fetchone())
         if(result):
-            return "User already Exists"
+            return {'error':"User Alread Exists",'data':None}
 
         sql = "INSERT INTO tb_admin (email,password) VALUES ('%s','%s')" % (email,password)
         print(sql)
@@ -42,7 +42,7 @@ def putUser(email,password):
         token = jwt.encode(token_data,constants.JWT_SECRET_TOKEN,algorithm='HS256')
 
         db.commit()
-        return token  
+        return {'data':token}  
          
     except Exception:
         db.rollback()
