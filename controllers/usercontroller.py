@@ -1,78 +1,43 @@
 from flask_restful import Resource, Api, reqparse, fields, marshal_with,marshal
 from handlers import userservice,loginservice
-import json
+import json,responses,requestParsers,identity
 
-output = {
-    'statusCode': fields.Integer(default=200),
-    'message': fields.String(default='Success'),
-    'data':fields.Raw()
-}
+
 class UserService(Resource):
 
     def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email')
+        parser = requestParsers.getUserParser()
         args = parser.parse_args()
+        user = identity.verifySession(args)
+        if 'error' in user:
+            return responses.sendError(user)
+
+        args['user'] = user['data']    
         result = userservice.getUser(args.email)
         print("############DICT###########",result)
-        response = {}
-        if(result):
-            response = {
-                'statusCode':200,
-                'message':'Success',
-                'data':result
-            }
+        if('data' in result):
+            return responses.sendSuccess(result)
         else:
-          response = {
-                'statusCode':400,
-                'message':'Not Found',
-                'data':{},
-            }
-        
-        print(result)
-        return json.dumps(marshal(response,output))
+            return responses.sendError(result)
           
  
     def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email',required=True,help="Email is requirerd")
-        parser.add_argument('password')
+        parser = requestParsers.registerUser()
         args = parser.parse_args(strict=True)
         print(args)
         result = userservice.putUser(args.email,args.password)
-        if(result['data']):
-            response = {
-                'statusCode':200,
-                'message':'Success',
-                'data':{'access_token':result['data']}
-            }
+        if('data' in result and result['data']):
+            return responses.sendSuccess(result)
         else:
-          response = {
-                'statusCode':400,
-                'message':result['error'],
-                'data':{},
-            }
-
-        return json.dumps(marshal(response,output))
-
+            return responses.sendError(result)
+        
+        
 class LoginService(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email')
-        parser.add_argument('password')
+        parser = requestParsers.login()
         args = parser.parse_args()
         data = loginservice.login(args)
         if 'data' in data and data['data']:
-            response = {
-                'statusCode':200,
-                'message':'Success',
-                'data':{'access_token':data['data']}
-            }
+           return responses.sendSuccess(data)
         else:
-          response = {
-                'statusCode':400,
-                'message':data['error'],
-                'data':{},
-            }
-
-        return json.dumps(marshal(response,output))
+           return responses.sendError(data)

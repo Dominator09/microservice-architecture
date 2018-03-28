@@ -7,7 +7,7 @@ databaseConnection.initialiseDatabase()
 app = Flask(__name__)
 api = Api(app)
 
-api.add_resource(UserService,'/user')
+api.add_resource(UserService,'/register')
 api.add_resource(LoginService,'/login')
 if __name__ == '__main__':
     app.run(debug=True)
