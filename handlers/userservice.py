@@ -28,13 +28,13 @@ def putUser(user_detail):
         if(result):
             return {'error':"User Alread Exists",'data':None}
 
-        sql = "INSERT INTO tb_admin (email,password,first_name,last_name,phone_no) VALUES ('%s','%s','%s','%s','%s')"
-              % (user_detail['email'],user_detail['password'],user_detail['first_name'],user_detail['last_name'],user_detail['phone_no'])
+        sql = "INSERT INTO tb_admin (email,password,first_name,last_name,phone_no) VALUES ('%s','%s','%s','%s','%s')" \
+        % (user_detail['email'],user_detail['password'],user_detail['first_name'],user_detail['last_name'],user_detail['phone_no'])
         print(sql)
         result = cursor.execute(sql)
         user_id=cursor.lastrowid
-        session = "INSERT INTO tb_session (user,user_type) VALUES (%d,%d,%d,'%s')"
-              % (user_id,0,user_detail['device_type'],user_detail['device_token'])
+        session = "INSERT INTO tb_session (user,user_type) VALUES (%d,%d,%d,'%s')" \
+        % (user_id,0,user_detail['device_type'],user_detail['device_token'])
         cursor.execute(session)
         session_id = cursor.lastrowid
         token_data = {'session_id':session_id,'user':user_id,'userType':0}

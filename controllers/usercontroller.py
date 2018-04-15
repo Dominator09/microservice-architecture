@@ -1,6 +1,7 @@
 from flask_restful import Resource, Api, reqparse, fields, marshal_with,marshal
 from handlers import userservice,loginservice
-import json,responses,requestParsers,identity
+import json,responses,requestParsers
+from utilities import identity
 
 
 class UserService(Resource):
