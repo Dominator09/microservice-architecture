@@ -14,7 +14,6 @@ class UserService(Resource):
 
         args['user'] = user['data']    
         result = userservice.getUser(args.email)
-        print("############DICT###########",result)
         if('data' in result):
             return responses.sendSuccess(result)
         else:
@@ -25,7 +24,7 @@ class UserService(Resource):
         parser = requestParsers.registerUser()
         args = parser.parse_args(strict=True)
         print(args)
-        result = userservice.putUser(args.email,args.password)
+        result = userservice.putUser(args)
         if('data' in result and result['data']):
             return responses.sendSuccess(result)
         else:

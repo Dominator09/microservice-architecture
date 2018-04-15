@@ -19,23 +19,22 @@ def getUser(email):
         result = cursor.fetchall()
         return result
 
-def putUser(email,password):
+def putUser(user_detail):
     try:
         cursor = db.cursor()
-        check_user_query = "SELECT user_id FROM tb_admin WHERE email='%s'" % (email)
+        check_user_query = "SELECT user_id FROM tb_admin WHERE email='%s'" % (user_detail['email'])
         cursor.execute(check_user_query)
         result = cursor.fetchone()
-        print("#########################",cursor.fetchone())
         if(result):
             return {'error':"User Alread Exists",'data':None}
 
-        sql = "INSERT INTO tb_admin (email,password) VALUES ('%s','%s')" % (email,password)
+        sql = "INSERT INTO tb_admin (email,password,first_name,last_name,phone_no) VALUES ('%s','%s','%s','%s','%s')"
+              % (user_detail['email'],user_detail['password'],user_detail['first_name'],user_detail['last_name'],user_detail['phone_no'])
         print(sql)
         result = cursor.execute(sql)
-        print("INSERT RESULT######################",result,cursor.lastrowid)
         user_id=cursor.lastrowid
-        session = "INSERT INTO tb_session (user,user_type) VALUES (%d,%d)" % (user_id,0)
-        print("SESSION######################3",session)
+        session = "INSERT INTO tb_session (user,user_type) VALUES (%d,%d,%d,'%s')"
+              % (user_id,0,user_detail['device_type'],user_detail['device_token'])
         cursor.execute(session)
         session_id = cursor.lastrowid
         token_data = {'session_id':session_id,'user':user_id,'userType':0}
