@@ -1,8 +1,7 @@
 import signal,os
-import tcpSockets
-
+from tcpSockets import TcpSocket
 def termination_handler():
-    socket = tcpSockets.get_tcp_connection_instance()
+    socket = TcpSocket.get_tcp_connection_instance()
     socket.close()
     return
 
