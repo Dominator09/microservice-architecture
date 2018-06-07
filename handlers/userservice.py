@@ -10,7 +10,6 @@ def getUser(email):
         query = "SELECT * FROM tb_admin WHERE email='%s'" % (email)
         cursor.execute(query)
         result = cursor.fetchone()
-        print("################RES#######################",result)
         return result
 
     else:

@@ -19,6 +19,11 @@ def registerUser():
 
 def login():
     parser = reqparse.RequestParser()
-    parser.add_argument('email',required=True,help="Email is requirerd")
+    parser.add_argument('email',required=True,help="Email is required")
     parser.add_argument('password')
-    return parser            
+    return parser 
+
+def forgotPassword():
+    parser = reqparse.RequestParser()
+    parser.add_argument('mobile',required=True,help="Mobile is required")
+    return parser

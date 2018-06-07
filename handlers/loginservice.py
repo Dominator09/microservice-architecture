@@ -6,7 +6,6 @@ db = databaseConnection.getDatabaseInstance()
 
 def login(data):
     try:
-        print("check1",data)
         cursor = db.cursor()
         if 'email' not in data or data['email'] is None:
             return {'error':'Email is Invalid'}
@@ -14,7 +13,6 @@ def login(data):
         sql = "SELECT user_id FROM tb_admin WHERE email = '%s'" % (data['email'])
         cursor.execute(sql)
         user = cursor.fetchone()
-        print("check1",user)
         if user is None:
             return {'error':'User not found'}
         

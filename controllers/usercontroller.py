@@ -41,3 +41,10 @@ class LoginService(Resource):
            return responses.sendSuccess(data)
         else:
            return responses.sendError(data)
+
+
+class ForgotPasswordService(Resource):
+    def post(self):
+        parser = requestParsers.forgotPassword()
+        args   = parser.parse_args()   
+        return responses.sendSuccess([]);        
