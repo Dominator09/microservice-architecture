@@ -27,3 +27,10 @@ def forgotPassword():
     parser = reqparse.RequestParser()
     parser.add_argument('mobile',required=True,help="Mobile is required")
     return parser
+
+def createStorage():
+    parser = reqparse.RequestParser()
+    parser.add_argument('size',required=True,help="provide size of disk")
+    parser.add_argument('name',required=True, help="provide name of drive")
+    parser.add_argument('access_token',required=True)
+    return parser

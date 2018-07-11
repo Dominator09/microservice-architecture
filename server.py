@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse, fields, marshal_with
 from controllers.usercontroller import UserService,LoginService
+from controllers.storageController import StorageService
 import databaseConnection
 from tcpSockets import TcpSocket
 
@@ -16,6 +17,7 @@ api = Api(app)
 
 api.add_resource(UserService,'/register')
 api.add_resource(LoginService,'/login')
+api.add_resource(StorageService,'/storage')
 
 if __name__ == '__main__':
     app.run(debug=True)
